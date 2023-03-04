@@ -1,6 +1,6 @@
 {
   "name": "set-git-config",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple CLI to set git config",
   "main": "./dist/index.js",
   "bin": "./dist/index.js",

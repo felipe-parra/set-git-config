@@ -69,4 +69,6 @@ async function askForGitConfig() {
   return responses;
 }
 
-main();
+if (require.main === module) {
+  main();
+}
