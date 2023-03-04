@@ -1,20 +1,20 @@
-import inquirer from "inquirer";
-import { exec } from "child_process";
+import inquirer from 'inquirer';
+import { exec } from 'child_process';
 
 export async function main() {
   try {
     const res = await askForGitConfig();
-    if (res.type === "Global") {
+    if (res.type === 'Global') {
       await runCommand(`git config --global user.name "${res.name}"`);
       await runCommand(`git config --global user.email "${res.email}"`);
     } else {
       await runCommand(`git config --local user.name "${res.name}"`);
       await runCommand(`git config --local user.email "${res.email}"`);
     }
-    console.log("Git configuration set!");
-    console.log("Your name is: ", res.name, " and your email is: ", res.email);
+    console.info('Git configuration set!');
+    console.info('You can check your configuration by running `git config --list`');
   } catch (err) {
-    console.log("Error", err);
+    console.error('Error', err);
   }
 }
 
@@ -23,20 +23,17 @@ export async function main() {
 // The return value is a promise, so it can be used with async/await.
 function runCommand(command: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    exec(
-      command,
-      (err: any, stdout: string | PromiseLike<string>, stderr: any) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        if (stderr) {
-          reject(stderr);
-          return;
-        }
-        resolve(stdout);
+    exec(command, (err: any, stdout: string | PromiseLike<string>, stderr: any) => {
+      if (err) {
+        reject(err);
+        return;
       }
-    );
+      if (stderr) {
+        reject(stderr);
+        return;
+      }
+      resolve(stdout);
+    });
   });
 }
 
@@ -48,22 +45,22 @@ function runCommand(command: string): Promise<string> {
 async function askForGitConfig() {
   const responses = await inquirer.prompt([
     {
-      type: "input",
-      name: "name",
-      message: "What is your name?",
-      default: "John Doe",
+      type: 'input',
+      name: 'name',
+      message: 'What is your name?',
+      default: 'John Doe',
     },
     {
-      type: "input",
-      name: "email",
-      message: "What is your email?",
-      default: "john@yopmail.com",
+      type: 'input',
+      name: 'email',
+      message: 'What is your email?',
+      default: 'john@yopmail.com',
     },
     {
-      type: "list",
-      name: "type",
-      message: "What type of configuration is this?",
-      choices: ["Global", "Local"],
+      type: 'list',
+      name: 'type',
+      message: 'What type of configuration is this?',
+      choices: ['Global', 'Local'],
     },
   ]);
 
